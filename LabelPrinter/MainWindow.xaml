@@ -1,0 +1,190 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LabelPrinter"
+        xmlns:ReoGrid="clr-namespace:unvell.ReoGrid;assembly=unvell.ReoGrid" xmlns:Converter="clr-namespace:Framework.Converter" xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" xmlns:Custom="http://www.galasoft.ch/mvvmlight" x:Class="LabelPrinter.MainWindow"
+        mc:Ignorable="d"
+        Title="标签打印" Height="450" Width="1000"
+        Loaded="Window_Loaded" Closed="Window_Closed" Closing="Window_Closing">
+    <Window.Resources>
+        <Converter:BoolToOppositeVisibilityConverter x:Key="BoolToOppositeVisibilityConverter"/>
+        <DataTemplate x:Key="dtReport">
+            <Grid Height="40">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="{Binding ReportName}" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                <StackPanel Orientation="Horizontal" Grid.Column="1">
+                    <Button HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ToolTip="复制新增" Margin="5,5,0,5" Command="{Binding CopyCmd, Mode=OneWay}" >
+                        <Image Source="Icons/report-copy.png" Margin="2" />
+                    </Button>
+                    <Button HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ToolTip="删除模板" Margin="5,5,0,5" Visibility="{Binding IsSystem, Converter={StaticResource BoolToOppositeVisibilityConverter}}" Command="{Binding RemoveCmd, Mode=OneWay}">
+                        <Image Source="Icons/report-remove.png" Margin="2" />
+                    </Button>
+                    <Button ToolTip="导出模板" HorizontalAlignment="Left" Command="{Binding ExportCmd, Mode=OneWay}" Margin="5">
+                        <Image Source="Icons/report-export.png" Margin="2" />
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+    </Window.Resources>
+    <Window.DataContext>
+        <Binding Path="Main" Source="{StaticResource Locator}"/>
+    </Window.DataContext>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <Custom:EventToCommand Command="{Binding LoadCmd, Mode=OneWay}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250"/>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid Background="#FFB4D4FF">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold" Foreground="#FF15428B" Margin="5,0,0,0" FontSize="14"><Run Text="模板列表"/></TextBlock>
+                <StackPanel Grid.Column="1" Margin="5" d:LayoutOverrides="Height" Orientation="Horizontal">
+                    <Button ToolTip="新增模板" HorizontalAlignment="Left" Command="{Binding ReportAddCmd, Mode=OneWay}">
+                        <Image Source="Icons/report-add.png" Margin="2" />
+                    </Button>
+                    <Button ToolTip="导入模板" HorizontalAlignment="Left" Command="{Binding ReportImportCmd}" Margin="5,0,0,0">
+                        <Image Source="Icons/report-import.png" Margin="2" />
+                    </Button>
+
+                </StackPanel>
+            </Grid>
+            <ListBox ItemsSource="{Binding ReportList}" ItemTemplate="{DynamicResource dtReport}" Grid.Row="1" HorizontalContentAlignment="Stretch" SelectedItem="{Binding SelectedReport}"/>
+        </Grid>
+        <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch"/>
+        <Grid Grid.Column="2" Background="#FFB4D4FF">
+            <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" ToolTip="新增模板" Command="{Binding ReportAddCmd, Mode=OneWay}" Width="120" d:LayoutOverrides="LeftMargin, RightMargin, TopMargin, BottomMargin">
+                    <Grid Margin="5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <Image Source="Icons/report-add.png" VerticalAlignment="Center" HorizontalAlignment="Center" Stretch="None" Margin="5" />
+                        <TextBlock Grid.Row="1" Text="新建模板" FontSize="18" Foreground="#FF15428B"/>
+                    </Grid>
+                </Button>
+                <Button Grid.Column="1" ToolTip="导入模板" Command="{Binding ReportImportCmd}" Width="120">
+                    <Grid Margin="5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <Image Source="Icons/report-import.png" Stretch="None" d:LayoutOverrides="Width, Height" Margin="5" />
+                        <TextBlock Grid.Row="1" Text="导入模板" FontSize="18" Foreground="#FF15428B"/>
+                    </Grid>
+                </Button>
+            </Grid>
+            <Grid x:Name="gridEdit">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="0.7*"/>
+                    <RowDefinition Height="5"/>
+                    <RowDefinition Height="0.3*"/>
+                </Grid.RowDefinitions>
+                <ReoGrid:ReoGridControl Grid.Row="3" x:Name="reoGrid" SheetTabWidth="200" SheetTabNewButtonVisible="False" Background="White" Readonly="True" />
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0" Orientation="Horizontal" Background="#FFB4D4FF" Margin="0,0,5,0">
+                        <Button x:Name="btnImport" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ToolTip="从Excel导入数据" Margin="5,5,0,5" Click="btnImport_Click">
+                            <Grid Margin="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Image Source="Icons/data-import.png" />
+                                <TextBlock Text="导入数据" Grid.Column="1" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                            </Grid>
+                        </Button>
+                        <Button x:Name="btnExport" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ToolTip="导出数据到Excel" Margin="5,5,0,5" Click="btnExport_Click">
+                            <Grid VerticalAlignment="Top" Margin="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Image Source="Icons/data-export.png" />
+                                <TextBlock Text="导出数据" Grid.Column="1" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                            </Grid>
+                        </Button>
+                        <Button x:Name="btnPageSetup" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ToolTip="页面设置" Margin="5,5,0,5" Click="btnPageSetup_Click">
+                            <Grid VerticalAlignment="Top" Margin="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Image Source="Icons/page-setup.png" />
+                                <TextBlock Text="页面设置" Grid.Column="1" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                            </Grid>
+                        </Button>
+                        <Button x:Name="btnPrinterSetup" HorizontalAlignment="Stretch" ToolTip="打印设置" Margin="5,5,0,5" Click="btnPrinterSetup_Click">
+                            <Grid VerticalAlignment="Top" Margin="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Image Source="Icons/printer-setup.png" />
+                                <TextBlock Text="打印设置" Grid.Column="1" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                            </Grid>
+                        </Button>
+                        <Button x:Name="btnPreview" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ToolTip="打印预览" Margin="5,5,0,5" Command="{Binding ReportPreviewCmd, Mode=OneWay}">
+                            <Grid VerticalAlignment="Top" Margin="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Image Source="Icons/preview.png" />
+                                <TextBlock Text="打印预览" Grid.Column="1" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                            </Grid>
+                        </Button>
+                        <Button x:Name="btnSave" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ToolTip="保存模板" Margin="5,5,0,5" Command="{Binding ReportSaveCmd, Mode=OneWay}">
+                            <Grid VerticalAlignment="Top" Margin="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Image Source="Icons/save.png" />
+                                <TextBlock Text="保存模板" Grid.Column="1" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                            </Grid>
+                        </Button>
+                        <Button x:Name="btnSaveAs" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ToolTip="另存模板" Margin="5,5,0,5" Command="{Binding ReportSaveAsCmd, Mode=OneWay}">
+                            <Grid VerticalAlignment="Top" Margin="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Image Source="Icons/save-as.png" />
+                                <TextBlock Text="另存模板" Grid.Column="1" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                            </Grid>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+                <WindowsFormsHost x:Name="wfhDesign" Grid.Row="1"/>
+                <GridSplitter Grid.Row="2" HorizontalAlignment="Stretch" Cursor="SizeNS"/>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>

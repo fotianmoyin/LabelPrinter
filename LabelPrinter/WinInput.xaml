@@ -1,0 +1,33 @@
+﻿<Window x:Class="LabelPrinter.WinInput"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LabelPrinter"
+        mc:Ignorable="d"
+        Title="{Binding Title}" Height="120" Width="300" ResizeMode="NoResize" 
+        DataContext="{Binding Path=Input, Source={StaticResource Locator}}" 
+        WindowStartupLocation="CenterOwner" Loaded="Window_Loaded">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+        <TextBox x:Name="txtInput" TextWrapping="Wrap" VerticalAlignment="Center" Margin="5" Text="{Binding Text}" KeyDown="txtInput_KeyDown"/>
+        <StackPanel HorizontalAlignment="Right" Margin="5" Grid.Row="1" Orientation="Horizontal">
+            <Button x:Name="btnCancel" Click="btnCancel_Click">
+                <StackPanel Orientation="Horizontal" Margin="2">
+                    <Image Source="Icons/uncheck.png"/>
+                    <TextBlock Text="取消" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                </StackPanel>
+            </Button>
+            <Button x:Name="btnOk" Margin="5,0,0,0" Click="btnOk_Click">
+                <StackPanel Orientation="Horizontal" Margin="2">
+                    <Image Source="Icons/check.png"/>
+                    <TextBlock Text="确定" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+
+    </Grid>
+</Window>
