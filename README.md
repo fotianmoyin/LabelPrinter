@@ -1,7 +1,7 @@
 # LabelPrinter
 LabelPrinter is a program for product label print
 
-<img src="doc/assets/LabelPrinter.png" width="10%">
+<img src="docs/assets/LabelPrinter.png" width="10%">
 
 ## Features
 
