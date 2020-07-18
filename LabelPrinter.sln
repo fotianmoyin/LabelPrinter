@@ -5,6 +5,13 @@ VisualStudioVersion = 16.0.29920.165
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LabelPrinter", "LabelPrinter\LabelPrinter.csproj", "{346663D8-8046-4892-9DA5-E7F8A3A8CF24}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Doc", "Doc", "{FAAF4543-A407-4941-B377-68EB70F7203A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "assets", "assets", "{C4B2FE2F-7CA3-4920-85F4-489893CF94B7}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\..\Pictures\图标\LabelPrinter.png = ..\..\..\Pictures\图标\LabelPrinter.png
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,6 +25,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C4B2FE2F-7CA3-4920-85F4-489893CF94B7} = {FAAF4543-A407-4941-B377-68EB70F7203A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B8D0A535-46B6-43A4-B44B-1F767E027EF2}
